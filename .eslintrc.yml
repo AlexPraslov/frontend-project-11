@@ -1,7 +1,30 @@
-extends: airbnb-base
 env:
   browser: true
   es2021: true
+
+extends: airbnb-base
+
+parserOptions:
+  ecmaVersion: latest
+  sourceType: module
+
 rules:
   no-console: off
-  import/extensions: ['error', 'ignorePackages']
+  import/extensions: off
+  no-trailing-spaces: error
+  arrow-body-style: off
+  consistent-return: off
+  no-param-reassign: ['error', { props: false }]
+  import/no-unresolved: 'off'
+
+settings:
+  import/resolver:
+    node:
+      extensions: ['.js']
+      moduleDirectory: ['node_modules', 'src/']
+
+ignorePatterns:
+  - dist/
+  - node_modules/
+  - '*.config.js'
+  - '*.yml'

@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './style.css';
-import initApp from './app/app.js';
+import initApp from './app/app';
 
 document.addEventListener('DOMContentLoaded', () => {
   console.log('DOM loaded');
