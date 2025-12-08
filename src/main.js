@@ -1,11 +1,13 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './style.css';
+import initApp from './app/app.js';
 
-const form = document.getElementById('rss-form');
-const input = document.getElementById('rss-url');
-
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const url = input.value;
-  console.log('RSS URL:', url);
-  input.value = '';
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('DOM loaded');
+  try {
+    initApp();
+    console.log('App initialized');
+  } catch (error) {
+    console.error('Error initializing app:', error);
+  }
 });

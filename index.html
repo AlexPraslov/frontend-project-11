@@ -4,12 +4,38 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RSS агрегатор</title>
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-  <form id="rss-form">
-    <input type="text" id="rss-url" placeholder="Введите RSS-ссылку">
-    <button type="submit">Добавить</button>
+<body class="container mt-5">
+  <h1 class="mb-4">RSS агрегатор</h1>
+  
+  <form data-rss-form class="mb-4">
+    <div class="row">
+      <div class="col-8">
+        <input 
+          type="text" 
+          data-rss-input 
+          name="url"
+          class="form-control" 
+          placeholder="Введите RSS-ссылку"
+          required
+        >
+        <div class="form-text text-danger" data-rss-feedback></div>
+      </div>
+      <div class="col-4">
+        <button 
+          type="submit" 
+          data-rss-submit 
+          class="btn btn-primary w-100"
+        >
+          Добавить
+        </button>
+      </div>
+    </div>
   </form>
+
+  <div data-rss-feeds class="mt-5"></div>
   
   <script type="module" src="/src/main.js"></script>
 </body>
