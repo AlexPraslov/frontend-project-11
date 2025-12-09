@@ -1,7 +1,7 @@
 import initView from './view';
 import validateUrl from './validator';
 
-const initApp = () => {
+const initApp = (i18n) => {
   console.log('initApp called');
 
   const elements = {
@@ -19,6 +19,11 @@ const initApp = () => {
     return;
   }
 
+  // Обновляем тексты интерфейса
+  document.querySelector('h1').textContent = i18n.t('appTitle');
+  elements.input.placeholder = i18n.t('inputPlaceholder');
+  elements.button.textContent = i18n.t('submitButton');
+
   const initialState = {
     feeds: [],
     form: {
@@ -28,7 +33,7 @@ const initApp = () => {
     },
   };
 
-  const state = initView(elements, initialState);
+  const state = initView(elements, initialState, i18n);
   console.log('State initialized:', state);
 
   const handleFormSubmit = (e) => {
@@ -39,7 +44,7 @@ const initApp = () => {
     console.log('URL submitted:', url);
 
     if (!url) {
-      state.form.error = 'Не должно быть пустым';
+      state.form.error = i18n.t('errors.required');
       state.form.status = 'error';
       return;
     }
@@ -49,7 +54,7 @@ const initApp = () => {
     state.form.error = null;
 
     console.log('Starting validation...');
-    validateUrl(url, state.feeds)
+    validateUrl(url, i18n, state.feeds)
       .then((validationResult) => {
         console.log('Validation result:', validationResult);
         if (validationResult.isValid) {
@@ -66,7 +71,7 @@ const initApp = () => {
       })
       .catch((error) => {
         console.error('Validation error:', error);
-        state.form.error = 'Произошла ошибка при валидации';
+        state.form.error = i18n.t('errors.unknown');
         state.form.status = 'error';
       });
   };

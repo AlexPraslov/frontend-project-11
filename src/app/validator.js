@@ -1,15 +1,15 @@
 import * as yup from 'yup';
 
-const createSchema = (existingFeeds) => yup.object().shape({
+const createSchema = (existingFeeds, i18n) => yup.object().shape({
   url: yup.string()
     .trim()
-    .required('Не должно быть пустым')
-    .url('Ссылка должна быть валидным URL')
-    .notOneOf(existingFeeds, 'RSS уже существует'),
+    .required(i18n.t('errors.required'))
+    .url(i18n.t('errors.url'))
+    .notOneOf(existingFeeds, i18n.t('errors.duplicate')),
 });
 
-const validateUrl = (url, existingFeeds = []) => {
-  const schema = createSchema(existingFeeds);
+const validateUrl = (url, i18n, existingFeeds = []) => {
+  const schema = createSchema(existingFeeds, i18n);
 
   return new Promise((resolve) => {
     schema.validate({ url }, { abortEarly: false })
