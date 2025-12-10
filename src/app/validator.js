@@ -8,8 +8,9 @@ const createSchema = (existingFeeds, i18n) => yup.object().shape({
     .notOneOf(existingFeeds, i18n.t('errors.duplicate')),
 });
 
-const validateUrl = (url, i18n, existingFeeds = []) => {
-  const schema = createSchema(existingFeeds, i18n);
+const validateUrl = (url, i18n, existingFeeds) => {
+  const feeds = existingFeeds || [];
+  const schema = createSchema(feeds, i18n);
 
   return new Promise((resolve) => {
     schema.validate({ url }, { abortEarly: false })

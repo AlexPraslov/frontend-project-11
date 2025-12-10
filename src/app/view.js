@@ -55,22 +55,72 @@ const renderFeeds = (elms, feeds, i18n) => {
   const { feedsContainer } = elms;
 
   if (feeds.length === 0) {
-    feedsContainer.innerHTML = `<p class="text-muted">${i18n.t('noFeeds')}</p>`;
+    feedsContainer.innerHTML = `
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">${i18n.t('feedsTitle')}</h5>
+          <p class="card-text text-muted">${i18n.t('noFeeds')}</p>
+        </div>
+      </div>
+    `;
     return;
   }
 
   const feedsHTML = `
-    <h3>${i18n.t('feedsTitle')}</h3>
-    <ul class="list-group">
-      ${feeds.map((feed, index) => `
-        <li class="list-group-item">
-          ${index + 1}. ${feed}
-        </li>
-      `).join('')}
-    </ul>
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">${i18n.t('feedsTitle')}</h5>
+        <div class="list-group">
+          ${feeds.map((feed) => `
+            <div class="list-group-item">
+              <h6 class="mb-1">${feed.title}</h6>
+              <p class="mb-1 small text-muted">${feed.description}</p>
+              <small class="text-muted">${feed.link}</small>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
   `;
 
   feedsContainer.innerHTML = feedsHTML;
+};
+
+const renderPosts = (elms, posts, i18n) => {
+  const { postsContainer } = elms;
+
+  if (posts.length === 0) {
+    postsContainer.innerHTML = `
+      <div class="card mt-4">
+        <div class="card-body">
+          <h5 class="card-title">${i18n.t('postsTitle', 'Посты')}</h5>
+          <p class="card-text text-muted">${i18n.t('noPosts', 'Пока нет постов')}</p>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  const postsHTML = `
+    <div class="card mt-4">
+      <div class="card-body">
+        <h5 class="card-title">${i18n.t('postsTitle', 'Посты')}</h5>
+        <div class="list-group">
+          ${posts.map((post) => `
+            <a href="${post.link}" 
+               class="list-group-item list-group-item-action" 
+               target="_blank" 
+               rel="noopener noreferrer">
+              <h6 class="mb-1">${post.title}</h6>
+              <p class="mb-1 small text-muted">${post.description.substring(0, 100)}${post.description.length > 100 ? '...' : ''}</p>
+            </a>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+
+  postsContainer.innerHTML = postsHTML;
 };
 
 const initView = (elements, initialState, i18n) => {
@@ -87,6 +137,13 @@ const initView = (elements, initialState, i18n) => {
         break;
       case 'feeds':
         renderFeeds(elements, state.feeds, i18n);
+        break;
+      case 'posts':
+        renderPosts(elements, state.posts, i18n);
+        break;
+      case 'loading.processState':
+        // Можно добавить индикатор глобальной загрузки
+        console.log('Loading state changed:', state.loading.processState);
         break;
       default:
         break;

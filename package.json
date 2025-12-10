@@ -16,6 +16,7 @@
     "vite": "^7.2.4"
   },
   "dependencies": {
+    "axios": "^1.13.2",
     "bootstrap": "^5.3.8",
     "i18next": "^25.7.2",
     "on-change": "^6.0.1",

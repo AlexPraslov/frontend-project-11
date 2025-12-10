@@ -22,3 +22,24 @@
 .list-group-item {
   word-break: break-all;
 }
+
+/* Стили для карточек фидов и постов */
+.card {
+  height: 100%;
+}
+
+.list-group-item-action:hover {
+  background-color: #f8f9fa;
+}
+
+/* Фикс высоты кнопки */
+[data-rss-submit] {
+  height: 38px; /* Такая же высота как у input */
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .col-md-4, .col-md-8 {
+    margin-bottom: 10px;
+  }
+}

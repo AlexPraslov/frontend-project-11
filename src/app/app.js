@@ -1,5 +1,7 @@
 import initView from './view';
 import validateUrl from './validator';
+import fetchRSS from './api';
+import parseRSS from './parser';
 
 const initApp = (i18n) => {
   console.log('initApp called');
@@ -10,6 +12,7 @@ const initApp = (i18n) => {
     feedback: document.querySelector('[data-rss-feedback]'),
     button: document.querySelector('[data-rss-submit]'),
     feedsContainer: document.querySelector('[data-rss-feeds]'),
+    postsContainer: document.querySelector('[data-rss-posts]'),
   };
 
   console.log('Elements found:', elements);
@@ -26,10 +29,15 @@ const initApp = (i18n) => {
 
   const initialState = {
     feeds: [],
+    posts: [],
     form: {
       error: null,
       status: 'idle',
       url: '',
+    },
+    loading: {
+      processState: 'idle',
+      error: null,
     },
   };
 
@@ -52,27 +60,66 @@ const initApp = (i18n) => {
     state.form.url = url;
     state.form.status = 'sending';
     state.form.error = null;
+    state.loading.processState = 'loading';
+    state.loading.error = null;
 
     console.log('Starting validation...');
-    validateUrl(url, i18n, state.feeds)
+    validateUrl(url, i18n, state.feeds.map((feed) => feed.url))
       .then((validationResult) => {
         console.log('Validation result:', validationResult);
-        if (validationResult.isValid) {
-          console.log('URL is valid, adding to feeds');
-          state.feeds.push(url);
-          state.form.status = 'success';
-          state.form.error = null;
-          state.form.url = '';
-        } else {
-          console.log('URL is invalid:', validationResult.errors.url);
+        if (!validationResult.isValid) {
           state.form.error = validationResult.errors.url;
           state.form.status = 'error';
+          state.loading.processState = 'failed';
+          return;
         }
+
+        console.log('Fetching RSS from:', url);
+        return fetchRSS(url)
+          .then((xmlData) => {
+            console.log('RSS fetched successfully, length:', xmlData.length);
+            return parseRSS(xmlData);
+          })
+          .then((parsedData) => {
+            console.log('RSS parsed successfully. Feed:', parsedData.feed.title, 'Posts:', parsedData.posts.length);
+
+            // Добавляем URL к фиду для проверки дубликатов
+            const feedWithUrl = {
+              ...parsedData.feed,
+              url,
+            };
+
+            state.feeds.push(feedWithUrl);
+            state.posts.push(...parsedData.posts);
+            state.form.status = 'success';
+            state.form.error = null;
+            state.form.url = '';
+            state.loading.processState = 'idle';
+          })
+          .catch((error) => {
+            console.error('Error in RSS pipeline:', error);
+            let errorMessage = i18n.t('errors.parsing');
+
+            // Более специфичные сообщения об ошибках
+            if (error.message.includes('timeout')) {
+              errorMessage = 'Таймаут сети. RSS-канал может быть недоступен или слишком медленный.';
+            } else if (error.message.includes('empty content')) {
+              errorMessage = 'RSS-канал вернул пустой контент. Возможно, он заблокирован или недоступен.';
+            } else if (error.message.includes('Network error')) {
+              errorMessage = 'Ошибка сети. Проверьте подключение к интернету.';
+            }
+
+            state.form.error = errorMessage;
+            state.form.status = 'error';
+            state.loading.processState = 'failed';
+            state.loading.error = error.message;
+          });
       })
       .catch((error) => {
         console.error('Validation error:', error);
         state.form.error = i18n.t('errors.unknown');
         state.form.status = 'error';
+        state.loading.processState = 'failed';
       });
   };
 

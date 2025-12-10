@@ -6,7 +6,11 @@ export default {
     submitButton: 'Добавить',
     loadingButton: 'Отправка...',
     noFeeds: 'Пока нет добавленных RSS',
-    feedsTitle: 'Добавленные RSS:',
+    feedsTitle: 'Добавленные RSS',
+
+    // Посты
+    postsTitle: 'Посты',
+    noPosts: 'Пока нет постов',
 
     // Ошибки валидации
     errors: {
@@ -21,6 +25,12 @@ export default {
     // Успешные сообщения
     success: {
       rssAdded: 'RSS успешно добавлен',
+    },
+
+    // Состояния загрузки
+    loading: {
+      network: 'Загрузка RSS...',
+      parsing: 'Парсинг данных...',
     },
   },
 };

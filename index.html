@@ -8,33 +8,49 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="container mt-5">
-  <h1 class="mb-4" data-i18n="appTitle">RSS агрегатор</h1>
-  
-  <form data-rss-form class="mb-4">
-    <div class="row">
-      <div class="col-8">
-        <input 
-          type="text" 
-          data-rss-input 
-          class="form-control" 
-          placeholder="Введите RSS-ссылку"
-          required
-        >
-        <div class="form-text text-danger" data-rss-feedback></div>
-      </div>
-      <div class="col-4">
-        <button 
-          type="submit" 
-          data-rss-submit 
-          class="btn btn-primary w-100"
-        >
-          Добавить
-        </button>
+  <div class="row">
+    <div class="col-lg-8 offset-lg-2">
+      <h1 class="mb-4 text-center" data-i18n="appTitle">RSS агрегатор</h1>
+      
+      <form data-rss-form class="mb-5">
+        <div class="row g-2">
+          <div class="col-md-8">
+            <input 
+              type="text" 
+              data-rss-input 
+              class="form-control" 
+              placeholder="Введите RSS-ссылку"
+              required
+              autofocus
+            >
+            <div class="form-text text-danger mt-1" data-rss-feedback></div>
+          </div>
+          <div class="col-md-4">
+            <button 
+              type="submit" 
+              data-rss-submit 
+              class="btn btn-primary w-100 py-2"
+            >
+              Добавить
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div data-rss-feeds>
+            <!-- Фиды будут здесь -->
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div data-rss-posts>
+            <!-- Посты будут здесь -->
+          </div>
+        </div>
       </div>
     </div>
-  </form>
-
-  <div data-rss-feeds class="mt-5"></div>
+  </div>
   
   <script type="module" src="/src/main.js"></script>
 </body>
