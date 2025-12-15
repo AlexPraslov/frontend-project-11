@@ -14,6 +14,11 @@ const initApp = (i18n) => {
     button: document.querySelector('[data-rss-submit]'),
     feedsContainer: document.querySelector('[data-rss-feeds]'),
     postsContainer: document.querySelector('[data-rss-posts]'),
+    // Элементы модального окна
+    modal: document.querySelector('#postModal'),
+    modalTitle: document.querySelector('[data-modal-title]'),
+    modalDescription: document.querySelector('[data-modal-description]'),
+    modalLink: document.querySelector('[data-modal-link]'),
   };
 
   console.log('Elements found:', elements);
@@ -21,6 +26,13 @@ const initApp = (i18n) => {
   if (!elements.form || !elements.input) {
     console.error('Form or input not found!');
     return;
+  }
+
+  // Инициализация Bootstrap модалки
+  let postModal = null;
+  if (elements.modal && window.bootstrap) {
+    // eslint-disable-next-line no-undef
+    postModal = new bootstrap.Modal(elements.modal);
   }
 
   // Обновляем тексты интерфейса
@@ -43,13 +55,46 @@ const initApp = (i18n) => {
     ui: {
       lastUpdate: null,
       updateInProgress: false,
+      readPostIds: new Set(), // Новое: ID прочитанных постов
+      modal: {
+        isOpen: false,
+        currentPost: null,
+      },
     },
   };
 
   let updateCycleControl = null;
 
-  const state = initView(elements, initialState, i18n);
+  const state = initView(elements, initialState, i18n, null); // Пока передаем null
   console.log('State initialized:', state);
+
+  // Функция для открытия модалки с постом (теперь state доступен)
+  const openPostModal = (post) => {
+    if (!postModal || !elements.modalTitle || !elements.modalDescription || !elements.modalLink) {
+      console.error('Modal elements not found');
+      return;
+    }
+
+    // Заполняем модалку данными
+    elements.modalTitle.textContent = post.title;
+    elements.modalDescription.innerHTML = post.description || 'Нет описания';
+    elements.modalLink.href = post.link;
+
+    // Отмечаем пост как прочитанный
+    if (!state.ui.readPostIds.has(post.id)) {
+      state.ui.readPostIds.add(post.id);
+    }
+
+    // Открываем модалку
+    postModal.show();
+    state.ui.modal.isOpen = true;
+    state.ui.modal.currentPost = post;
+
+    console.log('Post modal opened for:', post.title);
+  };
+
+  // Теперь обновляем view с правильной функцией
+  state.ui.openPostModal = openPostModal;
 
   // Функция для обновления состояния (для updater)
   const updateState = (updater) => {
@@ -73,6 +118,15 @@ const initApp = (i18n) => {
       console.log('Update cycle started/restarted');
     }
   };
+
+  // Закрытие модалки
+  if (elements.modal) {
+    elements.modal.addEventListener('hidden.bs.modal', () => {
+      state.ui.modal.isOpen = false;
+      state.ui.modal.currentPost = null;
+      console.log('Post modal closed');
+    });
+  }
 
   const handleFormSubmit = (e) => {
     console.log('Form submitted');
@@ -182,7 +236,7 @@ const initApp = (i18n) => {
     restartUpdateCycle();
   }
 
-  // Возвращаем состояние и контроллер
+  // Возвращаем состояние и функции
   return {
     state,
     stopUpdateCycle: () => {

@@ -86,7 +86,7 @@ const renderFeeds = (elms, feeds, i18n) => {
   feedsContainer.innerHTML = feedsHTML;
 };
 
-const renderPosts = (elms, posts, i18n) => {
+const renderPosts = (elms, posts, i18n, state) => {
   const { postsContainer } = elms;
 
   if (posts.length === 0) {
@@ -106,21 +106,54 @@ const renderPosts = (elms, posts, i18n) => {
       <div class="card-body">
         <h5 class="card-title">${i18n.t('postsTitle', 'Посты')}</h5>
         <div class="list-group">
-          ${posts.map((post) => `
-            <a href="${post.link}" 
-               class="list-group-item list-group-item-action" 
-               target="_blank" 
-               rel="noopener noreferrer">
-              <h6 class="mb-1">${post.title}</h6>
-              <p class="mb-1 small text-muted">${post.description.substring(0, 100)}${post.description.length > 100 ? '...' : ''}</p>
-            </a>
-          `).join('')}
+          ${posts.map((post) => {
+    const isRead = state.ui.readPostIds.has(post.id);
+    const titleClass = isRead ? 'fw-normal' : 'fw-bold';
+
+    return `
+              <div class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="me-auto">
+                  <div class="${titleClass} mb-1">${post.title}</div>
+                  <small class="text-muted">${post.description.substring(0, 100)}${post.description.length > 100 ? '...' : ''}</small>
+                </div>
+                <div class="btn-group" role="group">
+                  <a href="${post.link}" 
+                     class="btn btn-outline-primary btn-sm" 
+                     target="_blank" 
+                     rel="noopener noreferrer"
+                     title="Открыть в новой вкладке">
+                    <i class="bi bi-box-arrow-up-right"></i>
+                  </a>
+                  <button type="button" 
+                          class="btn btn-outline-secondary btn-sm" 
+                          data-post-id="${post.id}"
+                          title="Предпросмотр"
+                          data-post-preview>
+                    <i class="bi bi-eye"></i>
+                  </button>
+                </div>
+              </div>
+            `;
+  }).join('')}
         </div>
       </div>
     </div>
   `;
 
   postsContainer.innerHTML = postsHTML;
+
+  // Навешиваем обработчики на кнопки предпросмотра
+  const previewButtons = postsContainer.querySelectorAll('[data-post-preview]');
+  previewButtons.forEach((button) => {
+    button.addEventListener('click', (e) => {
+      e.preventDefault();
+      const postId = button.getAttribute('data-post-id');
+      const post = posts.find((p) => p.id === postId);
+      if (post && state.ui.openPostModal) {
+        state.ui.openPostModal(post);
+      }
+    });
+  });
 };
 
 const initView = (elements, initialState, i18n) => {
@@ -139,17 +172,16 @@ const initView = (elements, initialState, i18n) => {
         renderFeeds(elements, state.feeds, i18n);
         break;
       case 'posts':
-        renderPosts(elements, state.posts, i18n);
+      case 'ui.readPostIds':
+        renderPosts(elements, state.posts, i18n, state);
         break;
       case 'loading.processState':
         console.log('Loading state changed:', state.loading.processState);
         break;
       case 'ui.updateInProgress':
-        // Логируем статус обновления
         console.log('Update in progress:', state.ui.updateInProgress);
         break;
       case 'ui.lastUpdate':
-        // Логируем время последнего обновления
         console.log('Last update:', state.ui.lastUpdate);
         break;
       default:
