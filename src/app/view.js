@@ -142,8 +142,15 @@ const initView = (elements, initialState, i18n) => {
         renderPosts(elements, state.posts, i18n);
         break;
       case 'loading.processState':
-        // Можно добавить индикатор глобальной загрузки
         console.log('Loading state changed:', state.loading.processState);
+        break;
+      case 'ui.updateInProgress':
+        // Логируем статус обновления
+        console.log('Update in progress:', state.ui.updateInProgress);
+        break;
+      case 'ui.lastUpdate':
+        // Логируем время последнего обновления
+        console.log('Last update:', state.ui.lastUpdate);
         break;
       default:
         break;

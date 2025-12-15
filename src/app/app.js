@@ -2,6 +2,7 @@ import initView from './view';
 import validateUrl from './validator';
 import fetchRSS from './api';
 import parseRSS from './parser';
+import { startUpdateCycle } from './updater';
 
 const initApp = (i18n) => {
   console.log('initApp called');
@@ -39,10 +40,39 @@ const initApp = (i18n) => {
       processState: 'idle',
       error: null,
     },
+    ui: {
+      lastUpdate: null,
+      updateInProgress: false,
+    },
   };
+
+  let updateCycleControl = null;
 
   const state = initView(elements, initialState, i18n);
   console.log('State initialized:', state);
+
+  // Функция для обновления состояния (для updater)
+  const updateState = (updater) => {
+    const newState = updater(state);
+    Object.keys(newState).forEach((key) => {
+      state[key] = newState[key];
+    });
+  };
+
+  // Функция для получения состояния (для updater)
+  const getState = () => ({ ...state });
+
+  // Функция для запуска/перезапуска цикла обновления
+  const restartUpdateCycle = () => {
+    if (updateCycleControl) {
+      updateCycleControl.stop();
+    }
+
+    if (state.feeds.length > 0) {
+      updateCycleControl = startUpdateCycle(getState, updateState, 5000);
+      console.log('Update cycle started/restarted');
+    }
+  };
 
   const handleFormSubmit = (e) => {
     console.log('Form submitted');
@@ -62,6 +92,7 @@ const initApp = (i18n) => {
     state.form.error = null;
     state.loading.processState = 'loading';
     state.loading.error = null;
+    state.ui.updateInProgress = true;
 
     console.log('Starting validation...');
     validateUrl(url, i18n, state.feeds.map((feed) => feed.url))
@@ -71,6 +102,7 @@ const initApp = (i18n) => {
           state.form.error = validationResult.errors.url;
           state.form.status = 'error';
           state.loading.processState = 'failed';
+          state.ui.updateInProgress = false;
           return;
         }
 
@@ -89,29 +121,40 @@ const initApp = (i18n) => {
               url,
             };
 
+            // Добавляем новые посты с фидId
+            const postsWithFeedId = parsedData.posts.map((post) => ({
+              ...post,
+              feedId: feedWithUrl.id,
+            }));
+
             state.feeds.push(feedWithUrl);
-            state.posts.push(...parsedData.posts);
+            state.posts.push(...postsWithFeedId);
             state.form.status = 'success';
             state.form.error = null;
             state.form.url = '';
             state.loading.processState = 'idle';
+            state.ui.updateInProgress = false;
+            state.ui.lastUpdate = new Date().toISOString();
+
+            // Перезапускаем цикл обновления
+            restartUpdateCycle();
           })
           .catch((error) => {
             console.error('Error in RSS pipeline:', error);
             let errorMessage = i18n.t('errors.parsing');
 
-            // Более специфичные сообщения об ошибках
             if (error.message.includes('timeout')) {
-              errorMessage = 'Таймаут сети. RSS-канал может быть недоступен или слишком медленный.';
+              errorMessage = i18n.t('errors.timeout');
             } else if (error.message.includes('empty content')) {
-              errorMessage = 'RSS-канал вернул пустой контент. Возможно, он заблокирован или недоступен.';
+              errorMessage = i18n.t('errors.empty');
             } else if (error.message.includes('Network error')) {
-              errorMessage = 'Ошибка сети. Проверьте подключение к интернету.';
+              errorMessage = i18n.t('errors.network');
             }
 
             state.form.error = errorMessage;
             state.form.status = 'error';
             state.loading.processState = 'failed';
+            state.ui.updateInProgress = false;
             state.loading.error = error.message;
           });
       })
@@ -120,6 +163,7 @@ const initApp = (i18n) => {
         state.form.error = i18n.t('errors.unknown');
         state.form.status = 'error';
         state.loading.processState = 'failed';
+        state.ui.updateInProgress = false;
       });
   };
 
@@ -133,7 +177,20 @@ const initApp = (i18n) => {
     }
   });
 
-  return state;
+  // Запускаем цикл обновления если есть фиды при старте
+  if (state.feeds.length > 0) {
+    restartUpdateCycle();
+  }
+
+  // Возвращаем состояние и контроллер
+  return {
+    state,
+    stopUpdateCycle: () => {
+      if (updateCycleControl) {
+        updateCycleControl.stop();
+      }
+    },
+  };
 };
 
 export default initApp;
