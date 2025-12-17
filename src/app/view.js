@@ -80,7 +80,7 @@ const renderFeeds = (elms, feeds) => {
 
   const feedsHTML = `
   <div class="list-group">
-    ${feeds.map(feed => `
+    ${feeds.map((feed) => `
       <div class="list-group-item">
     <h6 class="mb-1 text-truncate">${feed.title}</h6>
     <p class="mb-1 small text-muted text-truncate">${feed.description}</p>
@@ -103,7 +103,7 @@ const renderPosts = (elms, posts, i18n, state) => {
 
   const postsHTML = `
   <div class="list-group">
-    ${posts.map(post => {
+    ${posts.map((post) => {
     const isRead = state.ui.readPostIds.has(post.id)
     const titleClass = isRead ? 'fw-normal' : 'fw-bold'
 
@@ -159,11 +159,11 @@ const renderPosts = (elms, posts, i18n, state) => {
   postsContainer.innerHTML = postsHTML
 
   const previewButtons = postsContainer.querySelectorAll('[data-post-preview]')
-  previewButtons.forEach(button => {
-    button.addEventListener('click', e => {
+  previewButtons.forEach((button) => {
+    button.addEventListener('click', (e) => {
       e.preventDefault()
       const postId = button.getAttribute('data-post-id')
-      const post = posts.find(p => p.id === postId)
+      const post = posts.find((p) => p.id === postId)
       if (post && state.ui.openPostModal) {
         state.ui.openPostModal(post)
       }
@@ -172,7 +172,7 @@ const renderPosts = (elms, posts, i18n, state) => {
 }
 
 const initView = (elements, initialState, i18n) => {
-  const state = onChange(initialState, path => {
+  const state = onChange(initialState, (path) => {
     switch (path) {
     case 'form.error':
       renderFormError(elements, state.form.error)

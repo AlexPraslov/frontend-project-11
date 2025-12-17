@@ -4,7 +4,7 @@ import fetchRSS from './api'
 import parseRSS from './parser'
 import { startUpdateCycle } from './updater'
 
-const initApp = i18n => {
+const initApp = (i18n) => {
   console.log('initApp called')
 
   const elements = {
@@ -69,7 +69,7 @@ const initApp = i18n => {
   console.log('State initialized:', state)
 
   // Функция для открытия модалки с постом (теперь state доступен)
-  const openPostModal = post => {
+  const openPostModal = (post) => {
     if (!postModal || !elements.modalTitle || !elements.modalDescription || !elements.modalLink) {
       console.error('Modal elements not found')
       return
@@ -97,9 +97,9 @@ const initApp = i18n => {
   state.ui.openPostModal = openPostModal
 
   // Функция для обновления состояния (для updater)
-  const updateState = updater => {
+  const updateState = (updater) => {
     const newState = updater(state)
-    Object.keys(newState).forEach(key => {
+    Object.keys(newState).forEach((key) => {
       state[key] = newState[key]
     })
   }
@@ -128,7 +128,7 @@ const initApp = i18n => {
     })
   }
 
-  const handleFormSubmit = e => {
+  const handleFormSubmit = (e) => {
     console.log('Form submitted')
     e.preventDefault()
 
@@ -149,8 +149,8 @@ const initApp = i18n => {
     state.ui.updateInProgress = true
 
     console.log('Starting validation...')
-    validateUrl(url, i18n, state.feeds.map(feed => feed.url))
-      .then(validationResult => {
+    validateUrl(url, i18n, state.feeds.map((feed) => feed.url))
+      .then((validationResult) => {
         console.log('Validation result:', validationResult)
         if (!validationResult.isValid) {
           state.form.error = validationResult.errors.url
@@ -162,11 +162,11 @@ const initApp = i18n => {
 
         console.log('Fetching RSS from:', url)
         return fetchRSS(url)
-          .then(xmlData => {
+          .then((xmlData) => {
             console.log('RSS fetched successfully, length:', xmlData.length)
             return parseRSS(xmlData)
           })
-          .then(parsedData => {
+          .then((parsedData) => {
             console.log('RSS parsed successfully. Feed:', parsedData.feed.title, 'Posts:', parsedData.posts.length)
 
             // Добавляем URL к фиду для проверки дубликатов
@@ -176,7 +176,7 @@ const initApp = i18n => {
             }
 
             // Добавляем новые посты с фидId
-            const postsWithFeedId = parsedData.posts.map(post => ({
+            const postsWithFeedId = parsedData.posts.map((post) => ({
               ...post,
               feedId: feedWithUrl.id,
             }))
@@ -193,7 +193,7 @@ const initApp = i18n => {
             // Перезапускаем цикл обновления
             restartUpdateCycle()
           })
-          .catch(error => {
+          .catch((error) => {
             console.error('Error in RSS pipeline:', error)
             let errorMessage = i18n.t('errors.parsing')
 
@@ -214,7 +214,7 @@ const initApp = i18n => {
             state.loading.error = error.message
           })
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Validation error:', error)
         state.form.error = i18n.t('errors.unknown')
         state.form.status = 'error'
