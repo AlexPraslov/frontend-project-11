@@ -35,12 +35,8 @@ const renderFormStatus = (elements, status, i18n) => {
       input.value = '';
       input.focus();
 
-      // ПОКАЗЫВАЕМ УСПЕШНОЕ СООБЩЕНИЕ
-      if (i18n && i18n.t) {
-        feedback.textContent = i18n.t('successMessage') || 'RSS успешно загружен';
-      } else {
-        feedback.textContent = 'RSS успешно загружен';
-      }
+      // ИСПРАВЛЕНО: Используем правильный ключ перевода success.rssAdded
+      feedback.textContent = i18n.t('success.rssAdded');
       feedback.classList.remove('text-danger');
       feedback.classList.add('text-success');
       feedback.style.display = 'block';
