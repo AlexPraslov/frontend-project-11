@@ -34,12 +34,12 @@ const renderFormStatus = (elements, status, i18n) => {
       input.readOnly = false;
       input.value = '';
       input.focus();
-      
+
       feedback.textContent = i18n.t('success.rssAdded');
       feedback.classList.remove('text-danger');
       feedback.classList.add('text-success');
       feedback.style.display = 'block';
-      
+
       setTimeout(() => {
         if (feedback.style.display === 'block' && feedback.classList.contains('text-success')) {
           feedback.style.display = 'none';
@@ -92,7 +92,6 @@ const renderFeeds = (elms, feeds) => {
   feedsContainer.innerHTML = feedsHTML;
 };
 
-// ФИНАЛЬНОЕ ИСПРАВЛЕНИЕ: У ссылки ТОЛЬКО fw-bold/fw-normal, кнопка РЯДОМ
 const renderPosts = (elms, posts, i18n, state) => {
   const { postsContainer } = elms;
 
@@ -116,9 +115,7 @@ const renderPosts = (elms, posts, i18n, state) => {
 
     return `
           <div class="list-group-item">
-            <!-- ГЛАВНОЕ: ссылка и кнопка на одном уровне -->
             <div class="d-flex justify-content-between align-items-start">
-              <!-- Ссылка с ТОЛЬКО fw-bold/fw-normal -->
               <a href="${post.link}" 
                  class="${titleClass}" 
                  title="${post.title}"
@@ -127,7 +124,6 @@ const renderPosts = (elms, posts, i18n, state) => {
                  style="text-decoration: none; flex-grow: 1; margin-right: 0.5rem;">
                 ${post.title}
               </a>
-              <!-- Кнопка "Просмотр" - непосредственный сосед ссылки -->
               <button type="button" 
                       class="btn btn-outline-secondary btn-sm" 
                       data-post-id="${post.id}"
@@ -137,11 +133,10 @@ const renderPosts = (elms, posts, i18n, state) => {
                 ${i18n.t('buttons.preview')}
               </button>
             </div>
-            <!-- Описание ниже -->
-            <small class="text-muted text-truncate d-block mt-1" title="${post.description || ''}">
+            <!-- ИСПРАВЛЕНИЕ: УБРАН title АТРИБУТ -->
+            <small class="text-muted text-truncate d-block mt-1">
               ${shortDescription}
             </small>
-            <!-- Кнопка "Открыть" -->
             <div class="mt-2">
               <a href="${post.link}" 
                  class="btn btn-outline-primary btn-sm" 
@@ -159,7 +154,6 @@ const renderPosts = (elms, posts, i18n, state) => {
 
   postsContainer.innerHTML = postsHTML;
 
-  // Навешиваем обработчики на кнопки предпросмотра
   const previewButtons = postsContainer.querySelectorAll('[data-post-preview]');
   previewButtons.forEach((button) => {
     button.addEventListener('click', (e) => {
