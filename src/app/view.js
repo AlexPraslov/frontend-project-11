@@ -35,13 +35,11 @@ const renderFormStatus = (elements, status, i18n) => {
       input.value = '';
       input.focus();
 
-      // ИСПРАВЛЕНО: Используем правильный ключ перевода success.rssAdded
       feedback.textContent = i18n.t('success.rssAdded');
       feedback.classList.remove('text-danger');
       feedback.classList.add('text-success');
       feedback.style.display = 'block';
 
-      // Автоматически скрываем через 3 секунды
       setTimeout(() => {
         if (feedback.style.display === 'block' && feedback.classList.contains('text-success')) {
           feedback.style.display = 'none';
@@ -94,7 +92,7 @@ const renderFeeds = (elms, feeds) => {
   feedsContainer.innerHTML = feedsHTML;
 };
 
-// ИСПРАВЛЕННАЯ ФУНКЦИЯ: Заголовки постов теперь ссылки <a> с классом fw-bold
+// ИСПРАВЛЕННАЯ ФУНКЦИЯ: Заголовки постов теперь имеют ТОЛЬКО класс fw-bold/fw-normal
 const renderPosts = (elms, posts, i18n, state) => {
   const { postsContainer } = elms;
 
@@ -119,13 +117,13 @@ const renderPosts = (elms, posts, i18n, state) => {
     return `
           <div class="list-group-item d-flex justify-content-between align-items-start">
             <div class="me-auto" style="min-width: 0; overflow: hidden;">
-              <!-- ЗАГЛАВИЕ ПОСТА ТЕПЕРЬ ССЫЛКА <a> С КЛАССОМ fw-bold/fw-normal -->
+              <!-- ВАЖНО: У ссылки теперь ТОЛЬКО класс fw-bold/fw-normal -->
               <a href="${post.link}" 
-                 class="${titleClass} mb-1 text-truncate d-block text-decoration-none" 
+                 class="${titleClass}" 
                  title="${post.title}"
                  target="_blank" 
                  rel="noopener noreferrer">
-                ${post.title}
+                <span class="d-block mb-1 text-truncate">${post.title}</span>
               </a>
               <small class="text-muted text-truncate d-block" title="${post.description || ''}">
                 ${shortDescription}
