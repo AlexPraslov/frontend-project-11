@@ -55,31 +55,19 @@ const renderFeeds = (elms, feeds, i18n) => {
   const { feedsContainer } = elms;
 
   if (feeds.length === 0) {
-    feedsContainer.innerHTML = `
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">${i18n.t('feedsTitle')}</h5>
-          <p class="card-text text-muted">${i18n.t('noFeeds')}</p>
-        </div>
-      </div>
-    `;
+    feedsContainer.innerHTML = '<p class="text-muted">Пока нет RSS</p>';
     return;
   }
 
   const feedsHTML = `
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">${i18n.t('feedsTitle')}</h5>
-        <div class="list-group">
-          ${feeds.map((feed) => `
-            <div class="list-group-item">
-              <h6 class="mb-1">${feed.title}</h6>
-              <p class="mb-1 small text-muted">${feed.description}</p>
-              <small class="text-muted">${feed.link}</small>
-            </div>
-          `).join('')}
+    <div class="list-group">
+      ${feeds.map((feed) => `
+        <div class="list-group-item">
+          <h6 class="mb-1 text-truncate">${feed.title}</h6>
+          <p class="mb-1 small text-muted text-truncate">${feed.description}</p>
+          <small class="text-muted text-truncate d-block">${feed.link}</small>
         </div>
-      </div>
+      `).join('')}
     </div>
   `;
 
@@ -90,65 +78,58 @@ const renderPosts = (elms, posts, i18n, state) => {
   const { postsContainer } = elms;
 
   if (posts.length === 0) {
-    postsContainer.innerHTML = `
-      <div class="card mt-4">
-        <div class="card-body">
-          <h5 class="card-title">${i18n.t('postsTitle', 'Посты')}</h5>
-          <p class="card-text text-muted">${i18n.t('noPosts', 'Пока нет постов')}</p>
-        </div>
-      </div>
-    `;
+    postsContainer.innerHTML = '<p class="text-muted">Пока нет постов</p>';
     return;
   }
 
   const postsHTML = `
-    <div class="card mt-4">
-      <div class="card-body">
-        <h5 class="card-title">${i18n.t('postsTitle', 'Посты')}</h5>
-        <div class="list-group">
-          ${posts.map((post) => {
-    const isRead = state.ui.readPostIds.has(post.id);
-    const titleClass = isRead ? 'fw-normal' : 'fw-bold';
-
-    return `
-              <div class="list-group-item d-flex justify-content-between align-items-start">
-                <div class="me-auto">
-                  <div class="${titleClass} mb-1">${post.title}</div>
-                  <small class="text-muted">${post.description.substring(0, 100)}${post.description.length > 100 ? '...' : ''}</small>
-                </div>
-                <div class="btn-group" role="group">
-                  <a href="${post.link}" 
-                     class="btn btn-outline-primary btn-sm" 
-                     target="_blank" 
-                     rel="noopener noreferrer"
-                     title="Открыть в новой вкладке">
-                    <i class="bi bi-box-arrow-up-right"></i>
-                  </a>
-                  <button type="button" 
-                          class="btn btn-outline-secondary btn-sm" 
-                          data-post-id="${post.id}"
-                          title="Предпросмотр"
-                          data-post-preview>
-                    <i class="bi bi-eye"></i>
-                  </button>
-                </div>
-              </div>
-            `;
-  }).join('')}
-        </div>
-      </div>
+    <div class="list-group">
+      ${posts.map((post) => {
+        const isRead = state.ui.readPostIds.has(post.id);
+        const titleClass = isRead ? 'fw-normal' : 'fw-bold';
+        const shortDescription = post.description ? 
+          (post.description.length > 80 ? post.description.substring(0, 80) + '...' : post.description) : '';
+        
+        return `
+          <div class="list-group-item d-flex justify-content-between align-items-start">
+            <div class="me-auto" style="min-width: 0; overflow: hidden;">
+              <div class="${titleClass} mb-1 text-truncate" title="${post.title}">${post.title}</div>
+              <small class="text-muted text-truncate d-block" title="${post.description || ''}">
+                ${shortDescription}
+              </small>
+            </div>
+            <div class="btn-group ms-2 flex-shrink-0" role="group">
+              <a href="${post.link}" 
+                 class="btn btn-outline-primary btn-sm d-flex align-items-center" 
+                 target="_blank" 
+                 rel="noopener noreferrer"
+                 title="Открыть в новой вкладке">
+                <i class="bi bi-box-arrow-up-right"></i>
+              </a>
+              <button type="button" 
+                      class="btn btn-outline-secondary btn-sm" 
+                      data-post-id="${post.id}"
+                      title="${i18n.t('buttons.preview')}"
+                      data-post-preview
+                      style="min-width: 75px;">
+                ${i18n.t('buttons.preview')}
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('')}
     </div>
   `;
 
   postsContainer.innerHTML = postsHTML;
-
+  
   // Навешиваем обработчики на кнопки предпросмотра
   const previewButtons = postsContainer.querySelectorAll('[data-post-preview]');
   previewButtons.forEach((button) => {
     button.addEventListener('click', (e) => {
       e.preventDefault();
       const postId = button.getAttribute('data-post-id');
-      const post = posts.find((p) => p.id === postId);
+      const post = posts.find(p => p.id === postId);
       if (post && state.ui.openPostModal) {
         state.ui.openPostModal(post);
       }
