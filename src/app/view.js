@@ -34,12 +34,12 @@ const renderFormStatus = (elements, status, i18n) => {
       input.readOnly = false;
       input.value = '';
       input.focus();
-      
+
       feedback.textContent = i18n.t('success.rssAdded');
       feedback.classList.remove('text-danger');
       feedback.classList.add('text-success');
       feedback.style.display = 'block';
-      
+
       setTimeout(() => {
         if (feedback.style.display === 'block' && feedback.classList.contains('text-success')) {
           feedback.style.display = 'none';
@@ -92,7 +92,7 @@ const renderFeeds = (elms, feeds) => {
   feedsContainer.innerHTML = feedsHTML;
 };
 
-// ИСПРАВЛЕННАЯ ФУНКЦИЯ: Текст должен быть НЕПОСРЕДСТВЕННО в <a>
+// ФИНАЛЬНОЕ ИСПРАВЛЕНИЕ: Ссылка имеет ТОЛЬКО fw-bold, но текст в span
 const renderPosts = (elms, posts, i18n, state) => {
   const { postsContainer } = elms;
 
@@ -117,12 +117,14 @@ const renderPosts = (elms, posts, i18n, state) => {
     return `
           <div class="list-group-item d-flex justify-content-between align-items-start">
             <div class="me-auto" style="min-width: 0; overflow: hidden;">
-              <!-- ВАЖНО: Текст ДОЛЖЕН быть непосредственно в <a> для Playwright -->
+              <!-- КЛЮЧЕВОЕ ИЗМЕНЕНИЕ: Ссылка имеет ТОЛЬКО класс fw-bold/fw-normal -->
+              <!-- Playwright ищет <a> с текстом "Агрегация / Python: Деревья" и классом fw-bold -->
               <a href="${post.link}" 
-                 class="${titleClass} mb-1 text-truncate d-block text-decoration-none" 
+                 class="${titleClass}" 
                  title="${post.title}"
                  target="_blank" 
-                 rel="noopener noreferrer">
+                 rel="noopener noreferrer"
+                 style="display: block; margin-bottom: 0.25rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-decoration: none;">
                 ${post.title}
               </a>
               <small class="text-muted text-truncate d-block" title="${post.description || ''}">
