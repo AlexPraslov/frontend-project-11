@@ -94,6 +94,7 @@ const renderFeeds = (elms, feeds) => {
   feedsContainer.innerHTML = feedsHTML;
 };
 
+// ИСПРАВЛЕННАЯ ФУНКЦИЯ: Заголовки постов теперь ссылки <a> с классом fw-bold
 const renderPosts = (elms, posts, i18n, state) => {
   const { postsContainer } = elms;
 
@@ -118,7 +119,14 @@ const renderPosts = (elms, posts, i18n, state) => {
     return `
           <div class="list-group-item d-flex justify-content-between align-items-start">
             <div class="me-auto" style="min-width: 0; overflow: hidden;">
-              <div class="${titleClass} mb-1 text-truncate" title="${post.title}">${post.title}</div>
+              <!-- ЗАГЛАВИЕ ПОСТА ТЕПЕРЬ ССЫЛКА <a> С КЛАССОМ fw-bold/fw-normal -->
+              <a href="${post.link}" 
+                 class="${titleClass} mb-1 text-truncate d-block text-decoration-none" 
+                 title="${post.title}"
+                 target="_blank" 
+                 rel="noopener noreferrer">
+                ${post.title}
+              </a>
               <small class="text-muted text-truncate d-block" title="${post.description || ''}">
                 ${shortDescription}
               </small>
