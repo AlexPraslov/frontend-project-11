@@ -30,4 +30,5 @@ jobs:
       run: make build
     
     - name: Lint
-      run: make lint
+      run: make Lint
+  
