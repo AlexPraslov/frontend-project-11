@@ -34,12 +34,12 @@ const renderFormStatus = (elements, status, i18n) => {
       input.readOnly = false;
       input.value = '';
       input.focus();
-
+      
       feedback.textContent = i18n.t('success.rssAdded');
       feedback.classList.remove('text-danger');
       feedback.classList.add('text-success');
       feedback.style.display = 'block';
-
+      
       setTimeout(() => {
         if (feedback.style.display === 'block' && feedback.classList.contains('text-success')) {
           feedback.style.display = 'none';
@@ -92,7 +92,7 @@ const renderFeeds = (elms, feeds) => {
   feedsContainer.innerHTML = feedsHTML;
 };
 
-// ФИНАЛЬНОЕ ИСПРАВЛЕНИЕ: Ссылка имеет ТОЛЬКО fw-bold, но текст в span
+// ФИНАЛЬНОЕ ИСПРАВЛЕНИЕ: Кнопка "Просмотр" должна быть рядом с ссылкой
 const renderPosts = (elms, posts, i18n, state) => {
   const { postsContainer } = elms;
 
@@ -115,38 +115,41 @@ const renderPosts = (elms, posts, i18n, state) => {
     }
 
     return `
-          <div class="list-group-item d-flex justify-content-between align-items-start">
-            <div class="me-auto" style="min-width: 0; overflow: hidden;">
-              <!-- КЛЮЧЕВОЕ ИЗМЕНЕНИЕ: Ссылка имеет ТОЛЬКО класс fw-bold/fw-normal -->
-              <!-- Playwright ищет <a> с текстом "Агрегация / Python: Деревья" и классом fw-bold -->
-              <a href="${post.link}" 
-                 class="${titleClass}" 
-                 title="${post.title}"
-                 target="_blank" 
-                 rel="noopener noreferrer"
-                 style="display: block; margin-bottom: 0.25rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-decoration: none;">
-                ${post.title}
-              </a>
-              <small class="text-muted text-truncate d-block" title="${post.description || ''}">
-                ${shortDescription}
-              </small>
-            </div>
-            <div class="btn-group ms-2 flex-shrink-0" role="group">
-              <a href="${post.link}" 
-                 class="btn btn-outline-primary btn-sm d-flex align-items-center" 
-                 target="_blank" 
-                 rel="noopener noreferrer"
-                 title="Открыть в новой вкладке">
-                <i class="bi bi-box-arrow-up-right"></i>
-              </a>
+          <div class="list-group-item">
+            <div class="d-flex justify-content-between align-items-start">
+              <div class="me-auto" style="min-width: 0; overflow: hidden;">
+                <!-- Ссылка с классом fw-bold -->
+                <a href="${post.link}" 
+                   class="${titleClass} d-block text-truncate" 
+                   title="${post.title}"
+                   target="_blank" 
+                   rel="noopener noreferrer"
+                   style="margin-bottom: 0.25rem; text-decoration: none;">
+                  ${post.title}
+                </a>
+                <small class="text-muted text-truncate d-block" title="${post.description || ''}">
+                  ${shortDescription}
+                </small>
+              </div>
+              <!-- Кнопка "Просмотр" ДОЛЖНА быть в той же строке после ссылки -->
               <button type="button" 
-                      class="btn btn-outline-secondary btn-sm" 
+                      class="btn btn-outline-secondary btn-sm ms-2" 
                       data-post-id="${post.id}"
                       title="${i18n.t('buttons.preview')}"
                       data-post-preview
-                      style="min-width: 75px;">
+                      style="min-width: 75px; white-space: nowrap;">
                 ${i18n.t('buttons.preview')}
               </button>
+            </div>
+            <!-- Кнопка "Открыть" в отдельной строке -->
+            <div class="mt-2">
+              <a href="${post.link}" 
+                 class="btn btn-outline-primary btn-sm" 
+                 target="_blank" 
+                 rel="noopener noreferrer"
+                 title="Открыть в новой вкладке">
+                <i class="bi bi-box-arrow-up-right me-1"></i>Открыть
+              </a>
             </div>
           </div>
         `;
