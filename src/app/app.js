@@ -15,7 +15,7 @@ const initApp = (i18n) => {
     feedsContainer: document.querySelector('[data-rss-feeds]'),
     postsContainer: document.querySelector('[data-rss-posts]'),
     // Элементы модального окна
-    modal: document.querySelector('#postModal'),
+    modal: document.querySelector('#post-modal'),
     modalTitle: document.querySelector('[data-modal-title]'),
     modalDescription: document.querySelector('[data-modal-description]'),
     modalLink: document.querySelector('[data-modal-link]'),

@@ -10,6 +10,9 @@ build:
 lint:
 	npx eslint .
 
+html-lint:
+	npx htmlhint *.html
+
 test:
 	echo "No tests configured"
 
