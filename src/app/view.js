@@ -7,6 +7,8 @@ const renderFormError = (elements, error) => {
   if (error) {
     input.classList.add('is-invalid');
     feedback.textContent = error;
+    feedback.classList.remove('text-success');
+    feedback.classList.add('text-danger');
     feedback.style.display = 'block';
   } else {
     input.classList.remove('is-invalid');
@@ -16,13 +18,14 @@ const renderFormError = (elements, error) => {
 };
 
 const renderFormStatus = (elements, status, i18n) => {
-  const { button, input } = elements;
+  const { button, input, feedback } = elements;
 
   switch (status) {
     case 'sending':
       button.disabled = true;
       button.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> ${i18n.t('loadingButton')}`;
       input.readOnly = true;
+      feedback.style.display = 'none';
       break;
 
     case 'success':
@@ -31,18 +34,39 @@ const renderFormStatus = (elements, status, i18n) => {
       input.readOnly = false;
       input.value = '';
       input.focus();
+
+      // ПОКАЗЫВАЕМ УСПЕШНОЕ СООБЩЕНИЕ
+      if (i18n && i18n.t) {
+        feedback.textContent = i18n.t('successMessage') || 'RSS успешно загружен';
+      } else {
+        feedback.textContent = 'RSS успешно загружен';
+      }
+      feedback.classList.remove('text-danger');
+      feedback.classList.add('text-success');
+      feedback.style.display = 'block';
+
+      // Автоматически скрываем через 3 секунды
+      setTimeout(() => {
+        if (feedback.style.display === 'block' && feedback.classList.contains('text-success')) {
+          feedback.style.display = 'none';
+          feedback.textContent = '';
+        }
+      }, 3000);
       break;
 
     case 'error':
       button.disabled = false;
       button.textContent = i18n.t('submitButton');
       input.readOnly = false;
+      feedback.classList.remove('text-success');
+      feedback.classList.add('text-danger');
       break;
 
     default:
       button.disabled = false;
       button.textContent = i18n.t('submitButton');
       input.readOnly = false;
+      feedback.style.display = 'none';
   }
 };
 
