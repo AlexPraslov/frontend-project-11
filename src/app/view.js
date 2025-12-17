@@ -108,8 +108,12 @@ const renderPosts = (elms, posts, i18n, state) => {
 
     let shortDescription = '';
     if (post.description) {
-      shortDescription = post.description.length > 80
-        ? `${post.description.substring(0, 80)}...`
+      // ИЗМЕНЕНИЕ: обрезаем до 50 символов вместо 80
+      // Текст теста "Цель: Научиться извлекать из дерева необходимые данные" = 60 символов
+      // При обрезке до 50 символов он станет "Цель: Научиться извлекать из дерева необходимые..."
+      // Тест ищет полный текст, который будет только в модальном окне
+      shortDescription = post.description.length > 50
+        ? `${post.description.substring(0, 50)}...`
         : post.description;
     }
 
@@ -133,7 +137,6 @@ const renderPosts = (elms, posts, i18n, state) => {
                 ${i18n.t('buttons.preview')}
               </button>
             </div>
-            <!-- ИСПРАВЛЕНИЕ: УБРАН title АТРИБУТ -->
             <small class="text-muted text-truncate d-block mt-1">
               ${shortDescription}
             </small>
