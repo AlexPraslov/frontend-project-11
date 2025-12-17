@@ -51,7 +51,7 @@ const renderFormUrl = (elms, url) => {
   newElms.input.value = url;
 };
 
-const renderFeeds = (elms, feeds, i18n) => {
+const renderFeeds = (elms, feeds) => {
   const { feedsContainer } = elms;
 
   if (feeds.length === 0) {
@@ -85,12 +85,17 @@ const renderPosts = (elms, posts, i18n, state) => {
   const postsHTML = `
     <div class="list-group">
       ${posts.map((post) => {
-        const isRead = state.ui.readPostIds.has(post.id);
-        const titleClass = isRead ? 'fw-normal' : 'fw-bold';
-        const shortDescription = post.description ? 
-          (post.description.length > 80 ? post.description.substring(0, 80) + '...' : post.description) : '';
-        
-        return `
+    const isRead = state.ui.readPostIds.has(post.id);
+    const titleClass = isRead ? 'fw-normal' : 'fw-bold';
+
+    let shortDescription = '';
+    if (post.description) {
+      shortDescription = post.description.length > 80
+        ? `${post.description.substring(0, 80)}...`
+        : post.description;
+    }
+
+    return `
           <div class="list-group-item d-flex justify-content-between align-items-start">
             <div class="me-auto" style="min-width: 0; overflow: hidden;">
               <div class="${titleClass} mb-1 text-truncate" title="${post.title}">${post.title}</div>
@@ -117,19 +122,19 @@ const renderPosts = (elms, posts, i18n, state) => {
             </div>
           </div>
         `;
-      }).join('')}
+  }).join('')}
     </div>
   `;
 
   postsContainer.innerHTML = postsHTML;
-  
+
   // Навешиваем обработчики на кнопки предпросмотра
   const previewButtons = postsContainer.querySelectorAll('[data-post-preview]');
   previewButtons.forEach((button) => {
     button.addEventListener('click', (e) => {
       e.preventDefault();
       const postId = button.getAttribute('data-post-id');
-      const post = posts.find(p => p.id === postId);
+      const post = posts.find((p) => p.id === postId);
       if (post && state.ui.openPostModal) {
         state.ui.openPostModal(post);
       }
@@ -150,7 +155,7 @@ const initView = (elements, initialState, i18n) => {
         renderFormUrl(elements, state.form.url);
         break;
       case 'feeds':
-        renderFeeds(elements, state.feeds, i18n);
+        renderFeeds(elements, state.feeds);
         break;
       case 'posts':
       case 'ui.readPostIds':
