@@ -1,18 +1,20 @@
 install:
-npm ci
+	npm ci
 
 develop:
-npm run dev
+	npm run dev
 
 build:
-npm run build
+	npm run build
 
 lint:
-npx eslint .
+	npx eslint .
 
 test:
-echo "No tests configured"
+	echo "No tests configured"
 
-check: build lint
+check:
+	build lint
 
-.PHONY: install develop build lint test check
+.PHONY:
+	install develop build lint test check
