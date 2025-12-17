@@ -79,7 +79,7 @@ const renderFeeds = (elms, feeds) => {
 
   const feedsHTML = `
   <div class="list-group">
-    ${feeds.map((feed) => `
+    ${feeds.map(feed => `
       <div class="list-group-item">
     <h6 class="mb-1 text-truncate">${feed.title}</h6>
     <p class="mb-1 small text-muted text-truncate">${feed.description}</p>
@@ -162,7 +162,7 @@ const renderPosts = (elms, posts, i18n, state) => {
     button.addEventListener('click', (e) => {
       e.preventDefault()
       const postId = button.getAttribute('data-post-id')
-      const post = posts.find((p) => p.id === postId)
+      const post = posts.find(p => p.id === postId)
       if (post && state.ui.openPostModal) {
         state.ui.openPostModal(post)
       }
