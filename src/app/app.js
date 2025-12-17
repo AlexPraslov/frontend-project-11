@@ -225,7 +225,6 @@ const initApp = (i18n) => {
   console.log('Event listener attached');
 
   elements.input.addEventListener('input', () => {
-    console.log('Input changed');
     if (state.form.error) {
       state.form.error = null;
     }
