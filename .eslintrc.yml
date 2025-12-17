@@ -10,13 +10,13 @@ parserOptions:
   sourceType: module
 
 rules:
-  # ПРАВИЛА CI (обязательные)
-  semi: ['error', 'never']
-  brace-style: ['error', 'stroustrup']
-  indent: ['error', 2]
-  arrow-parens: ['error', 'as-needed']
-  
-  # Твои кастомные правила
+  # === ПРАВИЛА CI (обязательные, поверх airbnb) ===
+  semi: ['error', 'never']                     # Без точек с запятой
+  brace-style: ['error', 'stroustrup']         # Скобки с новой строки
+  indent: ['error', 2]                         # Отступ 2 пробела
+  arrow-parens: ['error', 'as-needed']         # Скобки у параметров стрелочных функций
+
+  # === кастомные правила ===
   no-console: 'off'
   import/extensions: 'off'
   no-trailing-spaces: 'error'
