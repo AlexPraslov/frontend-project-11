@@ -92,7 +92,7 @@ const renderFeeds = (elms, feeds) => {
   feedsContainer.innerHTML = feedsHTML;
 };
 
-// ФИКС: У ссылки только класс fw-bold или fw-normal (без d-block text-truncate)
+// ФИКС: Кнопка "Просмотр" должна быть непосредственным соседом (+ sibling) ссылки
 const renderPosts = (elms, posts, i18n, state) => {
   const { postsContainer } = elms;
 
@@ -116,35 +116,35 @@ const renderPosts = (elms, posts, i18n, state) => {
 
     return `
           <div class="list-group-item">
+            <!-- ГЛАВНОЕ ИЗМЕНЕНИЕ: Ссылка и кнопка на одном уровне -->
             <div class="d-flex justify-content-between align-items-start">
-              <div class="me-auto" style="min-width: 0; overflow: hidden;">
-                <!-- Ссылка ТОЛЬКО с классом fw-bold или fw-normal (для теста) -->
-                <a href="${post.link}" 
-                   class="${titleClass}" 
-                   title="${post.title}"
-                   target="_blank" 
-                   rel="noopener noreferrer"
-                   style="margin-bottom: 0.25rem; text-decoration: none; display: block; overflow: hidden; text-overflow: ellipsis;">
-                  ${post.title}
-                </a>
-                <small class="text-muted text-truncate d-block" title="${post.description || ''}">
-                  ${shortDescription}
-                </small>
-              </div>
-              <!-- Кнопка "Просмотр" РЯДОМ с ссылкой -->
+              <!-- Ссылка - ТЕПЕРЬ непосредственно перед кнопкой -->
+              <a href="${post.link}" 
+                 class="${titleClass} me-2" 
+                 title="${post.title}"
+                 target="_blank" 
+                 rel="noopener noreferrer"
+                 style="text-decoration: none; flex-grow: 1;">
+                ${post.title}
+              </a>
+              <!-- Кнопка "Просмотр" - ТЕПЕРЬ непосредственный сосед ссылки -->
               <button type="button" 
                       class="btn btn-outline-secondary btn-sm ms-2" 
                       data-post-id="${post.id}"
                       title="${i18n.t('buttons.preview')}"
                       data-post-preview
-                      style="min-width: 75px; white-space: nowrap;">
+                      style="min-width: 75px; white-space: nowrap; flex-shrink: 0;">
                 ${i18n.t('buttons.preview')}
               </button>
             </div>
+            <!-- Описание ниже -->
+            <small class="text-muted text-truncate d-block mt-1" title="${post.description || ''}">
+              ${shortDescription}
+            </small>
             <!-- Кнопка "Открыть" в отдельной строке -->
             <div class="mt-2">
               <a href="${post.link}" 
-                 class="btn btn-outline-primary btn-sm" 
+                 class="btn btn btn-outline-primary btn-sm" 
                  target="_blank" 
                  rel="noopener noreferrer"
                  title="Открыть в новой вкладке">
