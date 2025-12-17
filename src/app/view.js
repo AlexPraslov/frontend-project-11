@@ -34,12 +34,12 @@ const renderFormStatus = (elements, status, i18n) => {
       input.readOnly = false;
       input.value = '';
       input.focus();
-
+      
       feedback.textContent = i18n.t('success.rssAdded');
       feedback.classList.remove('text-danger');
       feedback.classList.add('text-success');
       feedback.style.display = 'block';
-
+      
       setTimeout(() => {
         if (feedback.style.display === 'block' && feedback.classList.contains('text-success')) {
           feedback.style.display = 'none';
@@ -92,7 +92,7 @@ const renderFeeds = (elms, feeds) => {
   feedsContainer.innerHTML = feedsHTML;
 };
 
-// ИСПРАВЛЕННАЯ ФУНКЦИЯ: Заголовки постов теперь имеют ТОЛЬКО класс fw-bold/fw-normal
+// ИСПРАВЛЕННАЯ ФУНКЦИЯ: Текст должен быть НЕПОСРЕДСТВЕННО в <a>
 const renderPosts = (elms, posts, i18n, state) => {
   const { postsContainer } = elms;
 
@@ -117,13 +117,13 @@ const renderPosts = (elms, posts, i18n, state) => {
     return `
           <div class="list-group-item d-flex justify-content-between align-items-start">
             <div class="me-auto" style="min-width: 0; overflow: hidden;">
-              <!-- ВАЖНО: У ссылки теперь ТОЛЬКО класс fw-bold/fw-normal -->
+              <!-- ВАЖНО: Текст ДОЛЖЕН быть непосредственно в <a> для Playwright -->
               <a href="${post.link}" 
-                 class="${titleClass}" 
+                 class="${titleClass} mb-1 text-truncate d-block text-decoration-none" 
                  title="${post.title}"
                  target="_blank" 
                  rel="noopener noreferrer">
-                <span class="d-block mb-1 text-truncate">${post.title}</span>
+                ${post.title}
               </a>
               <small class="text-muted text-truncate d-block" title="${post.description || ''}">
                 ${shortDescription}
