@@ -1,8 +1,8 @@
-import i18next from 'i18next';
-import ru from './ru.js';
+import i18next from 'i18next'
+import ru from './ru.js'
 
 const initI18n = () => {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     i18next.init({
       lng: 'ru',
       debug: false,
@@ -10,9 +10,9 @@ const initI18n = () => {
         ru,
       },
     }, () => {
-      resolve(i18next);
-    });
-  });
-};
+      resolve(i18next)
+    })
+  })
+}
 
-export default initI18n;
+export default initI18n
