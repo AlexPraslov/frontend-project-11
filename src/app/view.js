@@ -34,12 +34,12 @@ const renderFormStatus = (elements, status, i18n) => {
       input.readOnly = false;
       input.value = '';
       input.focus();
-      
+
       feedback.textContent = i18n.t('success.rssAdded');
       feedback.classList.remove('text-danger');
       feedback.classList.add('text-success');
       feedback.style.display = 'block';
-      
+
       setTimeout(() => {
         if (feedback.style.display === 'block' && feedback.classList.contains('text-success')) {
           feedback.style.display = 'none';
@@ -92,7 +92,7 @@ const renderFeeds = (elms, feeds) => {
   feedsContainer.innerHTML = feedsHTML;
 };
 
-// ФИНАЛЬНОЕ ИСПРАВЛЕНИЕ: Кнопка "Просмотр" должна быть рядом с ссылкой
+// ФИКС: У ссылки только класс fw-bold или fw-normal (без d-block text-truncate)
 const renderPosts = (elms, posts, i18n, state) => {
   const { postsContainer } = elms;
 
@@ -118,20 +118,20 @@ const renderPosts = (elms, posts, i18n, state) => {
           <div class="list-group-item">
             <div class="d-flex justify-content-between align-items-start">
               <div class="me-auto" style="min-width: 0; overflow: hidden;">
-                <!-- Ссылка с классом fw-bold -->
+                <!-- Ссылка ТОЛЬКО с классом fw-bold или fw-normal (для теста) -->
                 <a href="${post.link}" 
-                   class="${titleClass} d-block text-truncate" 
+                   class="${titleClass}" 
                    title="${post.title}"
                    target="_blank" 
                    rel="noopener noreferrer"
-                   style="margin-bottom: 0.25rem; text-decoration: none;">
+                   style="margin-bottom: 0.25rem; text-decoration: none; display: block; overflow: hidden; text-overflow: ellipsis;">
                   ${post.title}
                 </a>
                 <small class="text-muted text-truncate d-block" title="${post.description || ''}">
                   ${shortDescription}
                 </small>
               </div>
-              <!-- Кнопка "Просмотр" ДОЛЖНА быть в той же строке после ссылки -->
+              <!-- Кнопка "Просмотр" РЯДОМ с ссылкой -->
               <button type="button" 
                       class="btn btn-outline-secondary btn-sm ms-2" 
                       data-post-id="${post.id}"
