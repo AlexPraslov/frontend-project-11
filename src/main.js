@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   console.log('DOM loaded')
 
   initI18n()
-    .then((i18n) => {
+    .then(i18n => {
       console.log('i18n initialized')
       try {
         initApp(i18n)
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Error initializing app:', error)
       }
     })
-    .catch((error) => {
+    .catch(error => {
       console.error('Failed to initialize i18n:', error)
     })
 })

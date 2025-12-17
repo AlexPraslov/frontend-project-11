@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-unresolved
 import onChange from 'on-change'
 
 const renderFormError = (elements, error) => {
@@ -22,46 +21,46 @@ const renderFormStatus = (elements, status, i18n) => {
   const { button, input, feedback } = elements
 
   switch (status) {
-  case 'sending':
-    button.disabled = true
-    button.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> ${i18n.t('loadingButton')}`
-    input.readOnly = true
-    feedback.style.display = 'none'
-    break
+    case 'sending':
+      button.disabled = true
+      button.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> ${i18n.t('loadingButton')}`
+      input.readOnly = true
+      feedback.style.display = 'none'
+      break
 
-  case 'success':
-    button.disabled = false
-    button.textContent = i18n.t('submitButton')
-    input.readOnly = false
-    input.value = ''
-    input.focus()
+    case 'success':
+      button.disabled = false
+      button.textContent = i18n.t('submitButton')
+      input.readOnly = false
+      input.value = ''
+      input.focus()
 
-    feedback.textContent = i18n.t('success.rssAdded')
-    feedback.classList.remove('text-danger')
-    feedback.classList.add('text-success')
-    feedback.style.display = 'block'
+      feedback.textContent = i18n.t('success.rssAdded')
+      feedback.classList.remove('text-danger')
+      feedback.classList.add('text-success')
+      feedback.style.display = 'block'
 
-    setTimeout(() => {
-      if (feedback.style.display === 'block' && feedback.classList.contains('text-success')) {
-        feedback.style.display = 'none'
-        feedback.textContent = ''
-      }
-    }, 3000)
-    break
+      setTimeout(() => {
+        if (feedback.style.display === 'block' && feedback.classList.contains('text-success')) {
+          feedback.style.display = 'none'
+          feedback.textContent = ''
+        }
+      }, 3000)
+      break
 
-  case 'error':
-    button.disabled = false
-    button.textContent = i18n.t('submitButton')
-    input.readOnly = false
-    feedback.classList.remove('text-success')
-    feedback.classList.add('text-danger')
-    break
+    case 'error':
+      button.disabled = false
+      button.textContent = i18n.t('submitButton')
+      input.readOnly = false
+      feedback.classList.remove('text-success')
+      feedback.classList.add('text-danger')
+      break
 
-  default:
-    button.disabled = false
-    button.textContent = i18n.t('submitButton')
-    input.readOnly = false
-    feedback.style.display = 'none'
+    default:
+      button.disabled = false
+      button.textContent = i18n.t('submitButton')
+      input.readOnly = false
+      feedback.style.display = 'none'
   }
 }
 
@@ -80,7 +79,7 @@ const renderFeeds = (elms, feeds) => {
 
   const feedsHTML = `
   <div class="list-group">
-    ${feeds.map((feed) => `
+    ${feeds.map(feed => `
       <div class="list-group-item">
     <h6 class="mb-1 text-truncate">${feed.title}</h6>
     <p class="mb-1 small text-muted text-truncate">${feed.description}</p>
@@ -103,7 +102,7 @@ const renderPosts = (elms, posts, i18n, state) => {
 
   const postsHTML = `
   <div class="list-group">
-    ${posts.map((post) => {
+    ${posts.map(post => {
     const isRead = state.ui.readPostIds.has(post.id)
     const titleClass = isRead ? 'fw-normal' : 'fw-bold'
 
@@ -159,11 +158,11 @@ const renderPosts = (elms, posts, i18n, state) => {
   postsContainer.innerHTML = postsHTML
 
   const previewButtons = postsContainer.querySelectorAll('[data-post-preview]')
-  previewButtons.forEach((button) => {
-    button.addEventListener('click', (e) => {
+  previewButtons.forEach(button => {
+    button.addEventListener('click', e => {
       e.preventDefault()
       const postId = button.getAttribute('data-post-id')
-      const post = posts.find((p) => p.id === postId)
+      const post = posts.find(p => p.id === postId)
       if (post && state.ui.openPostModal) {
         state.ui.openPostModal(post)
       }
@@ -172,35 +171,35 @@ const renderPosts = (elms, posts, i18n, state) => {
 }
 
 const initView = (elements, initialState, i18n) => {
-  const state = onChange(initialState, (path) => {
+  const state = onChange(initialState, path => {
     switch (path) {
-    case 'form.error':
-      renderFormError(elements, state.form.error)
-      break
-    case 'form.status':
-      renderFormStatus(elements, state.form.status, i18n)
-      break
-    case 'form.url':
-      renderFormUrl(elements, state.form.url)
-      break
-    case 'feeds':
-      renderFeeds(elements, state.feeds)
-      break
-    case 'posts':
-    case 'ui.readPostIds':
-      renderPosts(elements, state.posts, i18n, state)
-      break
-    case 'loading.processState':
-      console.log('Loading state changed:', state.loading.processState)
-      break
-    case 'ui.updateInProgress':
-      console.log('Update in progress:', state.ui.updateInProgress)
-      break
-    case 'ui.lastUpdate':
-      console.log('Last update:', state.ui.lastUpdate)
-      break
-    default:
-      break
+      case 'form.error':
+        renderFormError(elements, state.form.error)
+        break
+      case 'form.status':
+        renderFormStatus(elements, state.form.status, i18n)
+        break
+      case 'form.url':
+        renderFormUrl(elements, state.form.url)
+        break
+      case 'feeds':
+        renderFeeds(elements, state.feeds)
+        break
+      case 'posts':
+      case 'ui.readPostIds':
+        renderPosts(elements, state.posts, i18n, state)
+        break
+      case 'loading.processState':
+        console.log('Loading state changed:', state.loading.processState)
+        break
+      case 'ui.updateInProgress':
+        console.log('Update in progress:', state.ui.updateInProgress)
+        break
+      case 'ui.lastUpdate':
+        console.log('Last update:', state.ui.lastUpdate)
+        break
+      default:
+        break
     }
   })
 
