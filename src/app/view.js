@@ -34,12 +34,12 @@ const renderFormStatus = (elements, status, i18n) => {
       input.readOnly = false;
       input.value = '';
       input.focus();
-
+      
       feedback.textContent = i18n.t('success.rssAdded');
       feedback.classList.remove('text-danger');
       feedback.classList.add('text-success');
       feedback.style.display = 'block';
-
+      
       setTimeout(() => {
         if (feedback.style.display === 'block' && feedback.classList.contains('text-success')) {
           feedback.style.display = 'none';
@@ -92,7 +92,7 @@ const renderFeeds = (elms, feeds) => {
   feedsContainer.innerHTML = feedsHTML;
 };
 
-// ФИКС: Кнопка "Просмотр" должна быть непосредственным соседом (+ sibling) ссылки
+// ФИНАЛЬНОЕ ИСПРАВЛЕНИЕ: У ссылки ТОЛЬКО fw-bold/fw-normal, кнопка РЯДОМ
 const renderPosts = (elms, posts, i18n, state) => {
   const { postsContainer } = elms;
 
@@ -116,20 +116,20 @@ const renderPosts = (elms, posts, i18n, state) => {
 
     return `
           <div class="list-group-item">
-            <!-- ГЛАВНОЕ ИЗМЕНЕНИЕ: Ссылка и кнопка на одном уровне -->
+            <!-- ГЛАВНОЕ: ссылка и кнопка на одном уровне -->
             <div class="d-flex justify-content-between align-items-start">
-              <!-- Ссылка - ТЕПЕРЬ непосредственно перед кнопкой -->
+              <!-- Ссылка с ТОЛЬКО fw-bold/fw-normal -->
               <a href="${post.link}" 
-                 class="${titleClass} me-2" 
+                 class="${titleClass}" 
                  title="${post.title}"
                  target="_blank" 
                  rel="noopener noreferrer"
-                 style="text-decoration: none; flex-grow: 1;">
+                 style="text-decoration: none; flex-grow: 1; margin-right: 0.5rem;">
                 ${post.title}
               </a>
-              <!-- Кнопка "Просмотр" - ТЕПЕРЬ непосредственный сосед ссылки -->
+              <!-- Кнопка "Просмотр" - непосредственный сосед ссылки -->
               <button type="button" 
-                      class="btn btn-outline-secondary btn-sm ms-2" 
+                      class="btn btn-outline-secondary btn-sm" 
                       data-post-id="${post.id}"
                       title="${i18n.t('buttons.preview')}"
                       data-post-preview
@@ -141,10 +141,10 @@ const renderPosts = (elms, posts, i18n, state) => {
             <small class="text-muted text-truncate d-block mt-1" title="${post.description || ''}">
               ${shortDescription}
             </small>
-            <!-- Кнопка "Открыть" в отдельной строке -->
+            <!-- Кнопка "Открыть" -->
             <div class="mt-2">
               <a href="${post.link}" 
-                 class="btn btn btn-outline-primary btn-sm" 
+                 class="btn btn-outline-primary btn-sm" 
                  target="_blank" 
                  rel="noopener noreferrer"
                  title="Открыть в новой вкладке">
