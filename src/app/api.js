@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const ALL_ORIGINS_URL = 'https://allorigins.hexlet.app/get'
 
-const fetchRSS = url => {
+const fetchRSS = (url) => {
   const encodedUrl = encodeURIComponent(url)
   const proxyUrl = `${ALL_ORIGINS_URL}?url=${encodedUrl}&disableCache=true`
 
@@ -13,7 +13,7 @@ const fetchRSS = url => {
       timeout: 45000, // 45 секунд для медленных RSS
       responseType: 'json',
     })
-      .then(response => {
+      .then((response) => {
         console.log('Proxy response status:', response.status, 'data:', response.data)
 
         if (response.status !== 200) {
@@ -49,7 +49,7 @@ const fetchRSS = url => {
 
         resolve(data.contents)
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Axios error details:', error)
         if (error.code === 'ECONNABORTED') {
           reject(new Error('Network timeout. The feed might be too slow or unavailable.'))

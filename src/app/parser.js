@@ -1,4 +1,4 @@
-const parseRSS = xmlString => {
+const parseRSS = (xmlString) => {
   return new Promise((resolve, reject) => {
     try {
       const parser = new DOMParser()

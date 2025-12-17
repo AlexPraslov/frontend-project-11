@@ -12,7 +12,7 @@ const validateUrl = (url, i18n, existingFeeds) => {
   const feeds = existingFeeds || []
   const schema = createSchema(feeds, i18n)
 
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     schema.validate({ url }, { abortEarly: false })
       .then(() => {
         resolve({
@@ -20,11 +20,11 @@ const validateUrl = (url, i18n, existingFeeds) => {
           errors: {},
         })
       })
-      .catch(error => {
+      .catch((error) => {
         const errors = {}
 
         if (error.inner && error.inner.length > 0) {
-          error.inner.forEach(err => {
+          error.inner.forEach((err) => {
             errors[err.path] = err.message
           })
         }
