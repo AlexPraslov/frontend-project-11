@@ -53,12 +53,15 @@ const fetchRSS = (url) => {
         console.error('Axios error details:', error)
         if (error.code === 'ECONNABORTED') {
           reject(new Error('Network timeout. The feed might be too slow or unavailable.'))
-        } else if (error.response) {
+        }
+        else if (error.response) {
           const { status, statusText } = error.response
           reject(new Error(`Server error: ${status} ${statusText}`))
-        } else if (error.request) {
+        }
+        else if (error.request) {
           reject(new Error('Network error. Please check your internet connection.'))
-        } else {
+        }
+        else {
           reject(new Error(`Request error: ${error.message}`))
         }
       })

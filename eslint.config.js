@@ -31,16 +31,13 @@ export default [
       '@stylistic/indent': ['error', 2],
       '@stylistic/no-trailing-spaces': 'error',
       '@stylistic/eol-last': ['error', 'always'],
-      
-      // === ИЗМЕНЕНО по комментариям ревьюера ===
-      '@stylistic/brace-style': ['error', '1tbs'],  // ← как у ревьюера
-      '@stylistic/arrow-parens': ['error', 'always'],  // ← как у ревьюера
-      
+      '@stylistic/brace-style': ['error', 'stroustrup'],  
+      '@stylistic/arrow-parens': ['error', 'as-needed', { requireForBlockBody: true }],  
       '@stylistic/padded-blocks': ['error', 'never'],
       '@stylistic/no-multi-spaces': 'error',
       '@stylistic/no-multiple-empty-lines': ['error', { max: 1 }],
-      '@stylistic/spaced-comment': ['error', 'always'],  // ← ДОБАВЛЕНО
-      '@stylistic/quote-props': ['error', 'consistent-as-needed'],  // ← ДОБАВЛЕНО
+      '@stylistic/spaced-comment': ['error', 'always'],
+      '@stylistic/quote-props': ['error', 'consistent-as-needed'],
     },
     settings: {
       'import/resolver': {
@@ -50,7 +47,6 @@ export default [
       },
     },
   },
-  // === ДОБАВЛЕНО: игнорируемые файлы ===
   {
     ignores: [
       'node_modules/',

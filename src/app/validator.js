@@ -27,7 +27,8 @@ const validateUrl = (url, i18n, existingFeeds) => {
           error.inner.forEach((err) => {
             errors[err.path] = err.message
           })
-        } else {
+        }
+        else {
           errors.url = error.message
         }
 

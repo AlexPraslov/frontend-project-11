@@ -149,7 +149,7 @@ const initApp = (i18n) => {
     state.ui.updateInProgress = true
 
     console.log('Starting validation...')
-    validateUrl(url, i18n, state.feeds.map((feed) => feed.url))
+    validateUrl(url, i18n, state.feeds.map(feed => feed.url))
       .then((validationResult) => {
         console.log('Validation result:', validationResult)
         if (!validationResult.isValid) {
@@ -176,7 +176,7 @@ const initApp = (i18n) => {
             }
 
             // Добавляем новые посты с фидId
-            const postsWithFeedId = parsedData.posts.map((post) => ({
+            const postsWithFeedId = parsedData.posts.map(post => ({
               ...post,
               feedId: feedWithUrl.id,
             }))
@@ -199,9 +199,11 @@ const initApp = (i18n) => {
 
             if (error.message.includes('timeout')) {
               errorMessage = i18n.t('errors.timeout')
-            } else if (error.message.includes('empty content')) {
+            }
+            else if (error.message.includes('empty content')) {
               errorMessage = i18n.t('errors.empty')
-            } else if (error.message.includes('Network error')) {
+            }
+            else if (error.message.includes('Network error')) {
               errorMessage = i18n.t('errors.network')
             }
 
