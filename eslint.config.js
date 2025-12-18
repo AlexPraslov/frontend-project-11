@@ -25,21 +25,22 @@ export default [
       'import/no-unresolved': 'off',
       'no-console': 'warn',
       'no-unused-vars': 'warn',
-      
-      // === Стилистические правила ===
       '@stylistic/quotes': ['error', 'single'],
       '@stylistic/semi': ['error', 'never'],
       '@stylistic/comma-dangle': ['error', 'always-multiline'],
       '@stylistic/indent': ['error', 2],
       '@stylistic/no-trailing-spaces': 'error',
       '@stylistic/eol-last': ['error', 'always'],
-      '@stylistic/brace-style': ['error', 'stroustrup'],
-      '@stylistic/arrow-parens': ['error', 'as-needed', { requireForBlockBody: true }],
+      
+      // === ИЗМЕНЕНО по комментариям ревьюера ===
+      '@stylistic/brace-style': ['error', '1tbs'],  // ← как у ревьюера
+      '@stylistic/arrow-parens': ['error', 'always'],  // ← как у ревьюера
+      
       '@stylistic/padded-blocks': ['error', 'never'],
       '@stylistic/no-multi-spaces': 'error',
       '@stylistic/no-multiple-empty-lines': ['error', { max: 1 }],
-      '@stylistic/spaced-comment': ['error', 'always'],
-      '@stylistic/quote-props': ['error', 'consistent-as-needed'],
+      '@stylistic/spaced-comment': ['error', 'always'],  // ← ДОБАВЛЕНО
+      '@stylistic/quote-props': ['error', 'consistent-as-needed'],  // ← ДОБАВЛЕНО
     },
     settings: {
       'import/resolver': {
@@ -49,14 +50,13 @@ export default [
       },
     },
   },
-  
-  // === ДОБАВИЛ ИГНОРИРОВАНИЕ dist/ ===
+  // === ДОБАВЛЕНО: игнорируемые файлы ===
   {
     ignores: [
       'node_modules/',
-      'dist/',           
+      'dist/',
       '*.config.js',
-      '*.yml'
-    ]
-  }
+      '*.yml',
+    ],
+  },
 ]

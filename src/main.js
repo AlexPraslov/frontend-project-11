@@ -12,8 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         initApp(i18n)
         console.log('App initialized')
-      }
-      catch (error) {
+      } catch (error) {
         console.error('Error initializing app:', error)
       }
     })

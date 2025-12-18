@@ -51,8 +51,7 @@ const parseRSS = (xmlString) => {
         feed,
         posts,
       })
-    }
-    catch (error) {
+    } catch (error) {
       reject(new Error(`Parsing error: ${error.message}`))
     }
   })

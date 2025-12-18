@@ -21,7 +21,7 @@ const updateFeed = (feed, existingPostIds) => {
         console.log(`Found ${newPosts.length} new posts in ${feed.title}`)
 
         // Генерируем новые ID для новых постов
-        const postsWithIds = newPosts.map(post => ({
+        const postsWithIds = newPosts.map((post) => ({
           ...post,
           id: `post_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
           feedId: feed.id,
@@ -58,7 +58,7 @@ const updateAllFeeds = (feeds, existingPostIds) => {
     console.log(`Starting update for ${feeds.length} feeds`)
 
     // Создаем промисы для каждого фида
-    const updatePromises = feeds.map(feed => updateFeed(feed, existingPostIds))
+    const updatePromises = feeds.map((feed) => updateFeed(feed, existingPostIds))
 
     // Используем allSettled чтобы не прерываться при ошибках
     Promise.allSettled(updatePromises)
@@ -80,8 +80,7 @@ const updateAllFeeds = (feeds, existingPostIds) => {
             if (error) {
               errors.push({ feedId, error })
             }
-          }
-          else {
+          } else {
             errors.push({ feedId: 'unknown', error: result.reason.message })
           }
         })
@@ -119,13 +118,13 @@ const startUpdateCycle = (getState, updateState, interval = 5000) => {
     const { feeds } = state
 
     // Создаем Set из существующих ссылок постов для быстрой проверки
-    const existingPostIds = new Set(state.posts.map(post => post.link))
+    const existingPostIds = new Set(state.posts.map((post) => post.link))
 
     updateAllFeeds(feeds, existingPostIds)
       .then((result) => {
         if (result.updated && result.newPosts.length > 0) {
           // Обновляем состояние с новыми постами
-          updateState(prevState => ({
+          updateState((prevState) => ({
             ...prevState,
             posts: [...result.newPosts, ...prevState.posts], // Новые посты в начале
           }))
