@@ -103,17 +103,17 @@ const renderPosts = (elms, posts, i18n, state) => {
   const postsHTML = `
   <div class="list-group">
     ${posts.map((post) => {
-    const isRead = state.ui.readPostIds.has(post.id)
-    const titleClass = isRead ? 'fw-normal' : 'fw-bold'
+      const isRead = state.ui.readPostIds.has(post.id)
+      const titleClass = isRead ? 'fw-normal' : 'fw-bold'
 
-    let shortDescription = ''
-    if (post.description) {
-      shortDescription = post.description.length > 50
-        ? `${post.description.substring(0, 50)}...`
-        : post.description
-    }
+      let shortDescription = ''
+      if (post.description) {
+        shortDescription = post.description.length > 50
+          ? `${post.description.substring(0, 50)}...`
+          : post.description
+      }
 
-    return `
+      return `
         <div class="list-group-item">
           <div class="d-flex justify-content-between align-items-start">
             <a href="${post.link}"
@@ -147,7 +147,7 @@ const renderPosts = (elms, posts, i18n, state) => {
           </div>
         </div>
       `
-  }).join('')}
+    }).join('')}
   </div>
   `
 
