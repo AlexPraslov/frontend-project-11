@@ -81,9 +81,9 @@ const renderFeeds = (elms, feeds) => {
   <div class="list-group">
     ${feeds.map(feed => `
       <div class="list-group-item">
-    <h6 class="mb-1 text-truncate">${feed.title}</h6>
-    <p class="mb-1 small text-muted text-truncate">${feed.description}</p>
-    <small class="text-muted text-truncate d-block">${feed.link}</small>
+        <h6 class="mb-1 text-truncate">${feed.title}</h6>
+        <p class="mb-1 small text-muted text-truncate">${feed.description}</p>
+        <small class="text-muted text-truncate d-block">${feed.link}</small>
       </div>
     `).join('')}
   </div>
@@ -108,48 +108,44 @@ const renderPosts = (elms, posts, i18n, state) => {
 
     let shortDescription = ''
     if (post.description) {
-      // ИЗМЕНЕНИЕ: обрезаем до 50 символов вместо 80
-      // Текст теста "Цель: Научиться извлекать из дерева необходимые данные" = 60 символов
-      // При обрезке до 50 символов он станет "Цель: Научиться извлекать из дерева необходимые..."
-      // Тест ищет полный текст, который будет только в модальном окне
       shortDescription = post.description.length > 50
         ? `${post.description.substring(0, 50)}...`
         : post.description
     }
 
     return `
-    <div class="list-group-item">
-        <div class="d-flex justify-content-between align-items-start">
-          <a href="${post.link}" 
-             class="${titleClass}" 
-             title="${post.title}"
-           target="_blank" 
-           rel="noopener noreferrer"
-           style="text-decoration: none; flex-grow: 1; margin-right: 0.5rem;">
-          ${post.title}
-        </a>
-        <button type="button" 
-                class="btn btn-outline-secondary btn-sm" 
-                data-post-id="${post.id}"
-                title="${i18n.t('buttons.preview')}"
-                data-post-preview
-                style="min-width: 75px; white-space: nowrap; flex-shrink: 0;">
-          ${i18n.t('buttons.preview')}
-        </button>
-      </div>
-      <small class="text-muted text-truncate d-block mt-1">
-        ${shortDescription}
-      </small>
-      <div class="mt-2">
-        <a href="${post.link}" 
-           class="btn btn-outline-primary btn-sm" 
-           target="_blank" 
-           rel="noopener noreferrer"
-           title="Открыть в новой вкладке">
-          <i class="bi bi-box-arrow-up-right me-1"></i>Открыть
-        </a>
-      </div>
-    </div>
+        <div class="list-group-item">
+          <div class="d-flex justify-content-between align-items-start">
+            <a href="${post.link}"
+               class="${titleClass}"
+               title="${post.title}"
+               target="_blank"
+               rel="noopener noreferrer"
+               style="text-decoration: none; flex-grow: 1; margin-right: 0.5rem;">
+              ${post.title}
+            </a>
+            <button type="button"
+                    class="btn btn-outline-secondary btn-sm"
+                    data-post-id="${post.id}"
+                    title="${i18n.t('buttons.preview')}"
+                    data-post-preview
+                    style="min-width: 75px; white-space: nowrap; flex-shrink: 0;">
+              ${i18n.t('buttons.preview')}
+            </button>
+          </div>
+          <small class="text-muted text-truncate d-block mt-1">
+            ${shortDescription}
+          </small>
+          <div class="mt-2">
+            <a href="${post.link}"
+               class="btn btn-outline-primary btn-sm"
+               target="_blank"
+               rel="noopener noreferrer"
+               title="Открыть в новой вкладке">
+              <i class="bi bi-box-arrow-up-right me-1"></i>Открыть
+            </a>
+          </div>
+        </div>
       `
   }).join('')}
   </div>
