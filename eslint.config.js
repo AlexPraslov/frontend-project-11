@@ -1,52 +1,60 @@
-import js from '@eslint/js'
 import globals from 'globals'
+import pluginJs from '@eslint/js'
+import pluginImport from 'eslint-plugin-import'
 import stylistic from '@stylistic/eslint-plugin'
 
-// Экспортируем МАССИВ конфигов БЕЗ defineConfig
 export default [
-  // 1. Базовые правила ESLint
-  js.configs.recommended,
-
-  // 2. Стилистические правила (@stylistic)
   {
-    plugins: {
-      '@stylistic': stylistic
-    },
-    rules: {
-      // Правила из CI (смотрим на твои ошибки линтинга)
-      '@stylistic/indent': ['error', 2],
-      '@stylistic/semi': ['error', 'never'],
-      '@stylistic/arrow-parens': ['error', 'as-needed', { requireForBlockBody: true }],
-      '@stylistic/brace-style': ['error', 'stroustrup'],
-      '@stylistic/no-trailing-spaces': ['error'],
-      '@stylistic/comma-dangle': ['error', 'always-multiline'],
-      '@stylistic/no-multi-spaces': ['error'],
-    }
-  },
-
-  // 3. Настройки для JS файлов
-  {
-    files: ['**/*.js'],
     languageOptions: {
-      ecmaVersion: 'latest',
-      sourceType: 'module',
       globals: {
         ...globals.browser,
         ...globals.node,
-        process: 'readonly'
-      }
+      },
+      ecmaVersion: 2025,
+      sourceType: 'module',
+    },
+  },
+  pluginJs.configs.recommended,
+  {
+    plugins: {
+      'import': pluginImport,
+      '@stylistic': stylistic,
     },
     rules: {
-      'no-console': 'off',
-      'no-param-reassign': ['error', { props: false }],
-    }
+      'import/extensions': 'off',
+      'import/no-unresolved': 'off',
+      'no-console': 'warn',
+      'no-unused-vars': 'warn',
+      
+      // === Стилистические правила ===
+      '@stylistic/quotes': ['error', 'single'],
+      '@stylistic/semi': ['error', 'never'],
+      '@stylistic/comma-dangle': ['error', 'always-multiline'],
+      '@stylistic/indent': ['error', 2],
+      '@stylistic/no-trailing-spaces': 'error',
+      '@stylistic/eol-last': ['error', 'always'],
+      '@stylistic/brace-style': ['error', 'stroustrup'],
+      '@stylistic/arrow-parens': ['error', 'as-needed', { requireForBlockBody: true }],
+      '@stylistic/padded-blocks': ['error', 'never'],
+      '@stylistic/no-multi-spaces': 'error',
+      '@stylistic/no-multiple-empty-lines': ['error', { max: 1 }],
+      '@stylistic/spaced-comment': ['error', 'always'],
+      '@stylistic/quote-props': ['error', 'consistent-as-needed'],
+    },
+    settings: {
+      'import/resolver': {
+        node: {
+          extensions: ['.js', '.jsx'],
+        },
+      },
+    },
   },
-
-  // 4. Игнорируемые файлы (ВМЕСТО .eslintignore)
+  
+  // === ДОБАВИЛ ИГНОРИРОВАНИЕ dist/ ===
   {
     ignores: [
       'node_modules/',
-      'dist/',
+      'dist/',           
       '*.config.js',
       '*.yml'
     ]
