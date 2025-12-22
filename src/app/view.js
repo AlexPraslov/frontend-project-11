@@ -116,13 +116,13 @@ const renderPosts = (elms, posts, i18n, state) => {
       return `
         <div class="list-group-item">
           <div class="d-flex justify-content-between align-items-start mb-1">
-            <div class="flex-grow-1 me-3 text-decoration-none text-dark user-select-none pe-none">
-              <a href="#"
-                 class="${titleClass}"
-                 title="${post.title}">
-                ${post.title}
-              </a>
-            </div>
+            <a href="${post.link}"
+               class="${titleClass}"
+               title="${post.title}"
+               target="_blank"
+               rel="noopener noreferrer">
+              ${post.title}
+            </a>
             <button type="button"
                     class="btn btn-outline-secondary btn-sm text-nowrap flex-shrink-0"
                     data-post-id="${post.id}"
