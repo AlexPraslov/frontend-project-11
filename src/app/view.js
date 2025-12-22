@@ -115,35 +115,35 @@ const renderPosts = (elms, posts, i18n, state) => {
 
       return `
         <div class="list-group-item">
-          <div class="d-flex justify-content-between align-items-start">
+          <div class="d-flex justify-content-between align-items-start mb-1">
             <a href="${post.link}"
-               class="${titleClass}"
+               class="${titleClass} text-decoration-none flex-grow-1 me-3"
                title="${post.title}"
                target="_blank"
-               rel="noopener noreferrer"
-               style="text-decoration: none; flex-grow: 1; margin-right: 0.5rem;">
+               rel="noopener noreferrer">
               ${post.title}
             </a>
             <button type="button"
-                    class="btn btn-outline-secondary btn-sm"
+                    class="btn btn-outline-secondary btn-sm text-nowrap flex-shrink-0"
                     data-post-id="${post.id}"
                     title="${i18n.t('buttons.preview')}"
-                    data-post-preview
-                    style="min-width: 75px; white-space: nowrap; flex-shrink: 0;">
+                    data-post-preview>
               ${i18n.t('buttons.preview')}
             </button>
           </div>
-          <small class="text-muted text-truncate d-block mt-1">
-            ${shortDescription}
-          </small>
-          <div class="mt-2">
-            <a href="${post.link}"
-               class="btn btn-outline-primary btn-sm"
-               target="_blank"
-               rel="noopener noreferrer"
-               title="Открыть в новой вкладке">
-              <i class="bi bi-box-arrow-up-right me-1"></i>Открыть
-            </a>
+          <div class="d-flex justify-content-between align-items-end">
+            <small class="text-muted text-truncate flex-grow-1">
+              ${shortDescription}
+            </small>
+            <div class="ms-2 flex-shrink-0">
+              <a href="${post.link}"
+                 class="btn btn-outline-primary btn-sm text-nowrap d-inline-flex align-items-center"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 title="Открыть в новой вкладке">
+                <i class="bi bi-box-arrow-up-right me-1"></i>Открыть
+              </a>
+            </div>
           </div>
         </div>
       `
@@ -184,15 +184,6 @@ const initView = (elements, initialState, i18n) => {
       case 'posts':
       case 'ui.readPostIds':
         renderPosts(elements, state.posts, i18n, state)
-        break
-      case 'loading.processState':
-        console.log('Loading state changed:', state.loading.processState)
-        break
-      case 'ui.updateInProgress':
-        console.log('Update in progress:', state.ui.updateInProgress)
-        break
-      case 'ui.lastUpdate':
-        console.log('Last update:', state.ui.lastUpdate)
         break
       default:
         break
