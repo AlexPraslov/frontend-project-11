@@ -1,3 +1,5 @@
+/* global bootstrap */
+
 import initView from './view'
 import validateUrl from './validator'
 import fetchRSS from './api'
@@ -25,7 +27,7 @@ const initApp = (i18n) => {
 
   let postModal = null
   if (elements.modal && window.bootstrap) {
-    postModal = new bootstrap.Modal(elements.modal)
+    postModal = new window.bootstrap.Modal(elements.modal)
   }
 
   document.querySelector('h1').textContent = i18n.t('appTitle')
@@ -180,7 +182,7 @@ const initApp = (i18n) => {
             state.loading.error = error.message
           })
       })
-      .catch((error) => {
+      .catch((_error) => {
         state.form.error = i18n.t('errors.unknown')
         state.form.status = 'error'
         state.loading.processState = 'failed'
