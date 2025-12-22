@@ -116,13 +116,9 @@ const renderPosts = (elms, posts, i18n, state) => {
       return `
         <div class="list-group-item">
           <div class="d-flex justify-content-between align-items-start mb-1">
-            <a href="${post.link}"
-               class="${titleClass} text-decoration-none flex-grow-1 me-3"
-               title="${post.title}"
-               target="_blank"
-               rel="noopener noreferrer">
+            <div class="${titleClass} flex-grow-1 me-3">
               ${post.title}
-            </a>
+            </div>
             <button type="button"
                     class="btn btn-outline-secondary btn-sm text-nowrap flex-shrink-0"
                     data-post-id="${post.id}"
