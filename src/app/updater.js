@@ -110,7 +110,7 @@ const startUpdateCycle = (getState, updateState, interval = 5000) => {
 
         setTimeout(update, interval)
       })
-      .catch((_error) => {
+      .catch(() => {
         setTimeout(update, interval)
       })
   }

@@ -1,5 +1,3 @@
-/* global bootstrap */
-
 import initView from './view'
 import validateUrl from './validator'
 import fetchRSS from './api'
@@ -182,7 +180,7 @@ const initApp = (i18n) => {
             state.loading.error = error.message
           })
       })
-      .catch((_error) => {
+      .catch(() => {
         state.form.error = i18n.t('errors.unknown')
         state.form.status = 'error'
         state.loading.processState = 'failed'
